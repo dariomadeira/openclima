@@ -9,11 +9,27 @@ class ExtendedWeather extends StatelessWidget {
       appBar: AppBar(
         title: const Text("extended"),
       ),
+      
       body: Center(
-        child: FloatingActionButton(
-          onPressed:() => Navigator.pushNamed(context, 'location'),
-          child: const Text('Location'),
-           ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            
+            FloatingActionButton (
+              
+              
+              
+              shape: const Border.symmetric() ,
+              
+              onPressed:() => Navigator.pushNamed(context, 'location'),
+              child: const Text('Location'),
+              
+               ),
+               
+               
+
+          ],
+        ),
       ),
     );
   }

@@ -9,6 +9,13 @@ class SelectLocation extends StatelessWidget {
       appBar: AppBar(
         title: const Text("location"),
       ),
+      body: Center(
+        child: Text(toString()),
+
+        
+
+      ),
+      
     );
   }
 }
