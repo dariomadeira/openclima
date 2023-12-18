@@ -10,7 +10,9 @@ class SelectLocation extends StatelessWidget {
         title: const Text("location"),
       ),
       body: Center(
-        child: Text(toString()),
+        child: const SearchBar(hintText: 'Select Location'),
+        
+        
 
         
 
