@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:openclima/config/routers/app_reouters.dart';
+import 'package:openclima/config/routers/app_routers.dart';
 import 'package:openclima/screens/home_screen.dart';
+import 'package:openclima/services/shared_preferences_service.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final appPreferences = AppPreferences();
+  await appPreferences.initPref();
+  return runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
