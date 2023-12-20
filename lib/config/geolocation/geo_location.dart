@@ -1,5 +1,6 @@
 
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -14,7 +15,6 @@ class Geolocation extends StatefulWidget {
 }
 
 class _GeolocationState extends State<Geolocation> {
-  String resultado = 'dario';
   Future<Position> determinePosition() async{
     LocationPermission permission;
     permission = await Geolocator.checkPermission();
@@ -25,9 +25,7 @@ class _GeolocationState extends State<Geolocation> {
       return Future.error('error');
     }
     }
-    final juanjo = await Geolocator.getCurrentPosition();
-    inspect(juanjo);
-    return juanjo;
+    return await Geolocator.getCurrentPosition();
 
 
   }
@@ -40,6 +38,13 @@ class _GeolocationState extends State<Geolocation> {
 
   @override
   Widget build(BuildContext context) {
+    Position? _currentLocation;
+    late bool servicePermission = false;
+    late LocationPermission permission;
+    String _currentAdress = '';
+
+
+
     return Scaffold(
         appBar: AppBar(
           
@@ -53,19 +58,19 @@ class _GeolocationState extends State<Geolocation> {
       children: [
         FloatingActionButton(
           child: Text ('Tocame'),
-          onPressed: (){
-          final dario = determinePosition();
+          onPressed: () async {
+        _currentLocation = await determinePosition();
+          inspect(_currentLocation); 
           setState(() {
-            determinePosition().toString();
-            
+            _currentAdress = _currentLocation!.latitude.toString();
           });
-          
-          //determinePosition,
           }
           
         ),
-        Text(determinePosition().toString()),
+        
+      Text(_currentAdress)
       ],
+      
     ),
       
       
