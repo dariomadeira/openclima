@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:openclima/config/geolocation/geo_location.dart';
 import 'package:openclima/config/routers/app_reouters.dart';
+import 'package:openclima/screens/select_location.dart';
 
 void main() => runApp(const MyApp());
 
@@ -12,9 +12,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       routes: appRoutes,
       title: 'Material App',
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(
+        useMaterial3: true,
+      ),
       debugShowCheckedModeBanner: false,
-      home: const Geolocation(),
+      home: const SelectLocation(),
     );
   }
 }
