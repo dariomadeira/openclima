@@ -35,8 +35,13 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+<<<<<<< HEAD
   geolocator: ^10.1.0
   geocoding: ^2.1.1
+=======
+  shared_preferences: ^2.2.2
+  google_fonts: ^6.1.0
+>>>>>>> WIP/appIcon
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +53,14 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  ios: true
+  android: true
+  image_path: "assets/images/iconApp.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/foreground.png"  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -61,8 +74,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
