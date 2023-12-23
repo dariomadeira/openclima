@@ -37,7 +37,7 @@ class SearchInput extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding * 0.6),
             ),
             icon:Icon(suffixIcon),
-            onPressed: () {}, 
+            onPressed: accion, 
             label: const Text("Detectar")
           ),
         ),

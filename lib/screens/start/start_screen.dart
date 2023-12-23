@@ -22,14 +22,15 @@ class _StartScreenState extends State<StartScreen> {
     final prefs = AppPreferences();
     final String storageLat = prefs.readPreferenceString(kBaseLat);
     final String storageLong = prefs.readPreferenceString(kBaseLong);
-    Future.delayed(const Duration(seconds: kDefaultTime));
-    // if (storageLat.isEmpty || storageLong.isEmpty) {
-    //   // ignore: use_build_context_synchronously
-    //   Navigator.pushReplacementNamed(context, "location");
-    // } else {
-    //   // ignore: use_build_context_synchronously
-    //   Navigator.pushReplacementNamed(context, "home");
-    // }
+    Future.delayed(const Duration(seconds: 2), () async {
+      if (storageLat.isEmpty || storageLong.isEmpty) {
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacementNamed(context, "location");
+      } else {
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacementNamed(context, "home");
+      }
+    });
   }
 
   @override
