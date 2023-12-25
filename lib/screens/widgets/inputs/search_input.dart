@@ -7,6 +7,7 @@ class SearchInput extends StatelessWidget {
   final IconData prefixIcon;
   final IconData suffixIcon;
   final VoidCallback accion;
+  final Function? onChanged;
 
   const SearchInput({
     super.key,
@@ -14,12 +15,18 @@ class SearchInput extends StatelessWidget {
     this.prefixIcon = Icons.search,
     this.suffixIcon = Icons.location_searching_outlined,
     required this.accion,
+    this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: searchController,
+      onChanged: (value) {
+        if (onChanged != null) {
+          onChanged!(value);
+        }
+      },
       decoration: InputDecoration(
         border: InputBorder.none,
         prefixIcon: Icon(prefixIcon),
@@ -28,10 +35,6 @@ class SearchInput extends StatelessWidget {
         ),
         suffixIcon: Padding(
           padding: const EdgeInsets.only(right: 10),
-          // child: IconButton(
-          //   icon: Icon(suffixIcon),
-          //   onPressed: accion,
-          // ),
           child: FilledButton.icon(
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding * 0.6),

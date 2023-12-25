@@ -1,6 +1,10 @@
+import 'dart:developer';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:google_place/google_place.dart';
 import 'package:openclima/config/constants.dart';
 import 'package:openclima/config/helpers/colors_helper.dart';
+import 'package:openclima/customs/snacks_customs.dart';
 import 'package:openclima/providers/geo_provider.dart';
 import 'package:openclima/screens/widgets/inputs/search_input.dart';
 import 'package:openclima/screens/widgets/states/loading_widget.dart';
@@ -16,8 +20,16 @@ class SelectLocation extends StatefulWidget {
 }
 
 class _SelectLocationState extends State<SelectLocation> {
+  late GooglePlace googlePlace;
+  List<AutocompletePrediction> predictions = [];
   final TextEditingController searchController = TextEditingController();
   final colorsHelper = ColorsHelper();
+
+  @override
+  void initState() {
+    googlePlace = GooglePlace(kGooglePlacesApiKey);
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -30,71 +42,128 @@ class _SelectLocationState extends State<SelectLocation> {
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final geoProvider = Provider.of<GeoProvider>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Busque su ubicación"),
-      ),
-      body: geoProvider.isLoading
-          ? const Center(
-              child: LoadingWidget(),
-            )
-          :Column(
-        children: [
-          Container(
-              padding: const EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
-              width: 100.w,
-              // height: 20.h,
-              color: scaffoldBackgroundColor,
-              child: SearchInput(
-                  searchController: searchController,
-                  accion: () {
-                    geoProvider.getGeoLocation();
-                  })),
-          Expanded(
-            child: SizedBox(
-                width: 100.w,
-                // color: Colors.red,
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
-                  itemCount: 100,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        CustomTile(
-                          title: "title $index",
-                          subtitle: "subtitle $index",
-                          icon: Icons.pin_drop_outlined,
-                          noEllipsis: true,
-                          color: colorsHelper.randomColor(),
-                          showEdit: true,
-                          editAccion: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                          },
-                        ),
-                        // SizedBox(height: index == predictions.length - 1 ? kDefaultPadding : kDefaultPadding/2),
-                        const SizedBox(height: kDefaultPadding),
-                      ],
-                    );
-                  },
-                )),
-          ),
-        ],
-      ),
+    Future<void> getGeoLocation() async {
+      final Map<String, dynamic> data = await geoProvider.getGeoLocation();
+      // ignore: use_build_context_synchronously
+      showSnackbar(type: data['result'] ? "success" : "error", message: data['message'], context: context);
+      if (data['result']) {
+        await Future.delayed(const Duration(seconds: kSortTime));
+        // ignore: use_build_context_synchronously
+        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+      }
+    }
 
-      // body: const Column(
-      //   mainAxisAlignment: MainAxisAlignment.start,
-      //   children: [
-      // SearchBar(hintText: 'Select Location'),
-      //     RounderDetail(
-      //       icon: Icons.location_on_outlined,
-      //       color: Colors.indigo,
-      //     ),
-      //     RounderDetail(
-      //       icon: Icons.location_searching_outlined,
-      //       color: Colors.amber,
-      //     ),
-      //   ],
-      // )
+    Future<void> selectGeoLocation({placeId}) async {
+      var result = await googlePlace.details.get(placeId);
+      if (result != null && mounted) {
+        final bool dataBoolean = await geoProvider.saveLocation(
+          lat: result.result!.geometry!.location!.lat.toString(),
+          long: result.result!.geometry!.location!.lng.toString(),
+        );
+        // ignore: use_build_context_synchronously
+        showSnackbar(type: "success", message: 'Hemos obtenido tu ubicación', context: context);
+        if (dataBoolean) {
+          await Future.delayed(const Duration(seconds: kSortTime));
+          // ignore: use_build_context_synchronously
+          Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+        }
+      }
+    }
+
+    return Scaffold(
+      appBar: !geoProvider.isLoading
+          ? AppBar(
+              title: const Text("Busque su ubicación"),
+            )
+          : null,
+      body: geoProvider.isLoading
+          ? Center(
+              child: FadeIn(
+                child: LoadingWidget(
+                  loadingMessage: geoProvider.loadingMessage,
+                ),
+              ),
+            )
+          : Column(
+              children: [
+                Container(
+                    padding: const EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
+                    width: 100.w,
+                    color: scaffoldBackgroundColor,
+                    child: SearchInput(
+                      searchController: searchController,
+                      accion: getGeoLocation,
+                      onChanged: (String value) {
+                        if (value.isNotEmpty) {
+                          autoCompleteSearch(value);
+                        } else {
+                          if (predictions.isNotEmpty && mounted) {
+                            setState(() {
+                              predictions = [];
+                            });
+                          }
+                        }
+                      },
+                    )),
+                Expanded(
+                  child: SizedBox(
+                      width: 100.w,
+                      child: ListView.builder(
+                        padding: const EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
+                        itemCount: predictions.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              CustomTile(
+                                title: predictions[index].structuredFormatting!.mainText!,
+                                subtitle: predictions[index].structuredFormatting!.secondaryText ?? "",
+                                icon: Icons.pin_drop_outlined,
+                                noEllipsis: true,
+                                color: colorsHelper.randomColor(),
+                                showEdit: true,
+                                editAccion: () {
+                                  FocusScope.of(context).requestFocus(FocusNode());
+                                  selectGeoLocation(placeId: predictions[index].placeId!);
+                                },
+                              ),
+                              const SizedBox(height: kDefaultPadding),
+                            ],
+                          );
+                        },
+                      )
+                    ),
+                ),
+              ],
+            ),
     );
+  }
+
+  Future<void> autoCompleteSearch(String value) async {
+    final result = await googlePlace.autocomplete.get(
+      value,
+      language: "es",
+    );
+    // print("**** PLACE RESULT ****");
+    inspect(result);
+    if (result != null && result.predictions != null && mounted) {
+      if (predictions.isEmpty) {
+        setState(() {
+          predictions = result.predictions!;
+        });
+      } else {
+        if (result.predictions!.length < predictions.length) {
+          setState(() {
+            predictions = result.predictions!;
+          });
+        } else {
+          final set1 = Set.from(predictions);
+          final set2 = Set.from(result.predictions!);
+          final List<AutocompletePrediction> newPredictions = List.from(set2.difference(set1));
+          setState(() {
+            predictions = newPredictions;
+          });
+        }
+      }
+    }
   }
 }
