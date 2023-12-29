@@ -1,8 +1,11 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:openclima/apis/weather_api.dart';
 import 'package:openclima/config/constants.dart';
+import 'package:openclima/config/helpers/http_responses_helper.dart';
 import 'package:openclima/services/shared_preferences_service.dart';
+import 'dart:convert';
 
 class GeoProvider with ChangeNotifier {
   factory GeoProvider() {
@@ -14,7 +17,9 @@ class GeoProvider with ChangeNotifier {
   static final GeoProvider _thisInstance = GeoProvider._internal();
 
   bool isLoading = false;
-  String loadingMessage = '';
+  String loadingMessage = 'Cargando ubicación';
+  final weatherApi = WheaterApi();
+  late Map<String, dynamic> wheaterData;
 
   Future<Map<String, dynamic>> getGeoLocation() async {
     loadingMessage = "Detectando coordenadas";
@@ -35,7 +40,6 @@ class GeoProvider with ChangeNotifier {
         }
       }
       final data = await Geolocator.getCurrentPosition();
-      inspect(data);
       final bool savePref = await saveLocation(
         lat: data.latitude.toString(),
         long: data.longitude.toString(),
@@ -43,13 +47,10 @@ class GeoProvider with ChangeNotifier {
       if (savePref) {
         result['message'] = 'Hemos obtenido tu ubicación';
         result['result'] = true;
-        inspect(result);
       }
     } catch (e) {
-      // print("**** ERROR OBTENIENDO UBICACION ****");
       result['message'] = 'Error inesperado obteniendo ubicación';
     }
-    isLoading = false;
     return result;
   }
 
@@ -68,7 +69,35 @@ class GeoProvider with ChangeNotifier {
     prefs.savePreferenceString(kBaseLat, lat.toString());
     prefs.savePreferenceString(kBaseLong, long.toString());
     result = true;
-    isLoading = false;
+    return result;
+  }
+
+  Future<Map<String, dynamic>> getWeather({
+    required String lat,
+    required String long,
+  }) async {
+    loadingMessage = "Obteniendo clima";
+    notifyListeners();
+    Map<String, dynamic> result = {
+      'message': 'No pudimos obtener el clima',
+      'result': false,
+    };
+    final HttpResponses response = await weatherApi.getWeather(
+      lat: lat,
+      long: long,
+    );
+    print("**** RESPONSE ****");
+    inspect(response);
+    if (response.data != null) {
+      wheaterData = response.data['current'];
+      result['message'] = 'Hemos obtenido el clima';
+      result['result'] = true;
+      inspect(result);
+      print(json.encode(result));
+      print("**** WHEATER DATA ****");
+      inspect(wheaterData);
+      isLoading = false;
+    }
     return result;
   }
 }

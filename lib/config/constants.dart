@@ -5,6 +5,7 @@ const int kDefaultTime = 4;
 const int kSortTime = 2;
 const Color kSnackSuccess = Color(0xFF53BD8C);
 const String kGooglePlacesApiKey = "AIzaSyA_0BULRV-1AYr4BLTFbhGpC-fI1uSqw-4";
+const String kWeatherKey = "ec23b57a160c4d07a70125728212705";
 
 const String kBaseLat = 'lat';
 const String kBaseLong = 'long';

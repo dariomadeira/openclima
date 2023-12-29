@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:google_place/google_place.dart';
@@ -9,6 +8,7 @@ import 'package:openclima/providers/geo_provider.dart';
 import 'package:openclima/screens/widgets/inputs/search_input.dart';
 import 'package:openclima/screens/widgets/states/loading_widget.dart';
 import 'package:openclima/screens/widgets/tiles/custom_tile.dart';
+import 'package:openclima/services/shared_preferences_service.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -42,14 +42,28 @@ class _SelectLocationState extends State<SelectLocation> {
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final geoProvider = Provider.of<GeoProvider>(context);
 
+    Future<void> getWeather() async {
+      final prefs = AppPreferences();
+      final String storageLat = prefs.readPreferenceString(kBaseLat);
+      final String storageLong = prefs.readPreferenceString(kBaseLong);
+      final Map<String, dynamic> weatherData = await geoProvider.getWeather(
+        lat: storageLat,
+        long: storageLong,
+      );
+      if (weatherData['result']) {
+        await Future.delayed(const Duration(seconds: kSortTime));
+        // ignore: use_build_context_synchronously
+        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+      }
+    }
+
     Future<void> getGeoLocation() async {
       final Map<String, dynamic> data = await geoProvider.getGeoLocation();
       // ignore: use_build_context_synchronously
       showSnackbar(type: data['result'] ? "success" : "error", message: data['message'], context: context);
       if (data['result']) {
         await Future.delayed(const Duration(seconds: kSortTime));
-        // ignore: use_build_context_synchronously
-        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+        getWeather();
       }
     }
 
@@ -64,8 +78,7 @@ class _SelectLocationState extends State<SelectLocation> {
         showSnackbar(type: "success", message: 'Hemos obtenido tu ubicación', context: context);
         if (dataBoolean) {
           await Future.delayed(const Duration(seconds: kSortTime));
-          // ignore: use_build_context_synchronously
-          Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+          getWeather();
         }
       }
     }
@@ -130,8 +143,7 @@ class _SelectLocationState extends State<SelectLocation> {
                             ],
                           );
                         },
-                      )
-                    ),
+                      )),
                 ),
               ],
             ),
@@ -143,8 +155,6 @@ class _SelectLocationState extends State<SelectLocation> {
       value,
       language: "es",
     );
-    // print("**** PLACE RESULT ****");
-    inspect(result);
     if (result != null && result.predictions != null && mounted) {
       if (predictions.isEmpty) {
         setState(() {

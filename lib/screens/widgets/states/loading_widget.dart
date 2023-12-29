@@ -20,7 +20,7 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final size = MediaQuery.of(context).size;
-    final String defaultMessage = loadingMessage == "" ? "Cargando ubicación" : loadingMessage!;
+    final String defaultMessage = loadingMessage == "" ? "Cargando" : loadingMessage!;
     const String defaultAnimation = 'assets/animations/sun.json';
     final animation = simpleLoad ? defaultAnimation : defaultAnimation;
     final ThemeData theme = Theme.of(context);
