@@ -1,11 +1,12 @@
 import 'dart:developer';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:openclima/apis/weather_api.dart';
 import 'package:openclima/config/constants.dart';
 import 'package:openclima/config/helpers/http_responses_helper.dart';
 import 'package:openclima/services/shared_preferences_service.dart';
-import 'dart:convert';
+// import 'dart:convert';
 
 class GeoProvider with ChangeNotifier {
   factory GeoProvider() {
@@ -20,6 +21,7 @@ class GeoProvider with ChangeNotifier {
   String loadingMessage = 'Cargando ubicación';
   final weatherApi = WheaterApi();
   late Map<String, dynamic> wheaterData;
+  late Map<String, dynamic> weatherTypeSelected;
 
   Future<Map<String, dynamic>> getGeoLocation() async {
     loadingMessage = "Detectando coordenadas";
@@ -37,6 +39,8 @@ class GeoProvider with ChangeNotifier {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
           result['message'] = 'Necesitamos tu persmiso para obtener tu ubicación';
+          isLoading = false;
+          notifyListeners();
         }
       }
       final data = await Geolocator.getCurrentPosition();
@@ -50,6 +54,8 @@ class GeoProvider with ChangeNotifier {
       }
     } catch (e) {
       result['message'] = 'Error inesperado obteniendo ubicación';
+      isLoading = false;
+      notifyListeners();
     }
     return result;
   }
@@ -86,18 +92,47 @@ class GeoProvider with ChangeNotifier {
       lat: lat,
       long: long,
     );
-    print("**** RESPONSE ****");
-    inspect(response);
+    // print("**** RESPONSE ****");
+    // inspect(response);
     if (response.data != null) {
       wheaterData = response.data['current'];
       result['message'] = 'Hemos obtenido el clima';
-      result['result'] = true;
-      inspect(result);
-      print(json.encode(result));
-      print("**** WHEATER DATA ****");
+      // result['result'] = true;
+      // inspect(result);
+      // print(json.encode(result));
+      // print("**** WHEATER DATA ****");
       inspect(wheaterData);
-      isLoading = false;
+      bool detectResult = await detectWeatherType();
+      if (detectResult) {
+        result['result'] = true;
+      }
     }
     return result;
+  }
+
+  Future<bool> detectWeatherType() async {
+    final actualTemp = wheaterData['temp_c'];
+    bool result = false;
+    // print("**** ACTUAL TEMP **** $actualTemp");
+    final index = weatherTypes.indexWhere((weatherType) {
+      final minTemp = weatherType["min"].toDouble();
+      final maxTemp = weatherType["max"].toDouble();
+      return actualTemp >= minTemp && actualTemp <= maxTemp;
+    });
+    if (index != -1) {
+      Map<String, dynamic> processWeather = Map.from(weatherTypes[index]);
+      result = await selectOneBackground(processWeather);
+    }
+    return result;
+  }
+
+  selectOneBackground(processWeather) {
+    Random random = Random();
+    String selectedAsset = processWeather["asset"][random.nextInt(processWeather["asset"].length)];
+    processWeather["asset"] = [selectedAsset];
+    weatherTypeSelected = processWeather;
+    // inspect(weatherTypeSelected);
+    isLoading = false;
+    return true;
   }
 }

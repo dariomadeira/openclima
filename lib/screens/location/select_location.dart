@@ -6,11 +6,13 @@ import 'package:openclima/config/helpers/colors_helper.dart';
 import 'package:openclima/customs/snacks_customs.dart';
 import 'package:openclima/providers/geo_provider.dart';
 import 'package:openclima/screens/widgets/inputs/search_input.dart';
+import 'package:openclima/screens/widgets/states/empty_widget.dart';
 import 'package:openclima/screens/widgets/states/loading_widget.dart';
 import 'package:openclima/screens/widgets/tiles/custom_tile.dart';
 import 'package:openclima/services/shared_preferences_service.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class SelectLocation extends StatefulWidget {
   const SelectLocation({super.key});
@@ -24,10 +26,16 @@ class _SelectLocationState extends State<SelectLocation> {
   List<AutocompletePrediction> predictions = [];
   final TextEditingController searchController = TextEditingController();
   final colorsHelper = ColorsHelper();
+  bool isKeyboardVisible = false;
 
   @override
   void initState() {
     googlePlace = GooglePlace(kGooglePlacesApiKey);
+    KeyboardVisibilityController().onChange.listen((bool visible) {
+      setState(() {
+        isKeyboardVisible = visible;
+      });
+    });
     super.initState();
   }
 
@@ -86,7 +94,15 @@ class _SelectLocationState extends State<SelectLocation> {
     return Scaffold(
       appBar: !geoProvider.isLoading
           ? AppBar(
-              title: const Text("Busque su ubicación"),
+              title: const Text("Mi ubicación"),
+            )
+          : null,
+      floatingActionButton: !geoProvider.isLoading
+          ? FloatingActionButton.extended(
+              elevation: 0.0,
+              onPressed: getGeoLocation,
+              label: const Text("Detectar"),
+              icon: const Icon(Icons.my_location_outlined),
             )
           : null,
       body: geoProvider.isLoading
@@ -105,7 +121,6 @@ class _SelectLocationState extends State<SelectLocation> {
                     color: scaffoldBackgroundColor,
                     child: SearchInput(
                       searchController: searchController,
-                      accion: getGeoLocation,
                       onChanged: (String value) {
                         if (value.isNotEmpty) {
                           autoCompleteSearch(value);
@@ -121,29 +136,36 @@ class _SelectLocationState extends State<SelectLocation> {
                 Expanded(
                   child: SizedBox(
                       width: 100.w,
-                      child: ListView.builder(
-                        padding: const EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
-                        itemCount: predictions.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              CustomTile(
-                                title: predictions[index].structuredFormatting!.mainText!,
-                                subtitle: predictions[index].structuredFormatting!.secondaryText ?? "",
-                                icon: Icons.pin_drop_outlined,
-                                noEllipsis: true,
-                                color: colorsHelper.randomColor(),
-                                showEdit: true,
-                                editAccion: () {
-                                  FocusScope.of(context).requestFocus(FocusNode());
-                                  selectGeoLocation(placeId: predictions[index].placeId!);
-                                },
+                      child: predictions.isEmpty && !isKeyboardVisible
+                          ? FadeIn(
+                            child: const EmptyWidget(
+                                emptyMessage: ["Sin ubicación", "Busque una ubicación", "o presione detectar"],
+                                svgAsset: 'assets/svgs/emptyLocation.svg',
                               ),
-                              const SizedBox(height: kDefaultPadding),
-                            ],
-                          );
-                        },
-                      )),
+                          )
+                          : ListView.builder(
+                              padding: const EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
+                              itemCount: predictions.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    CustomTile(
+                                      title: predictions[index].structuredFormatting!.mainText!,
+                                      subtitle: predictions[index].structuredFormatting!.secondaryText ?? "",
+                                      icon: Icons.pin_drop_outlined,
+                                      noEllipsis: true,
+                                      color: colorsHelper.randomColor(),
+                                      showEdit: true,
+                                      editAccion: () {
+                                        FocusScope.of(context).requestFocus(FocusNode());
+                                        selectGeoLocation(placeId: predictions[index].placeId!);
+                                      },
+                                    ),
+                                    const SizedBox(height: kDefaultPadding),
+                                  ],
+                                );
+                              },
+                            )),
                 ),
               ],
             ),

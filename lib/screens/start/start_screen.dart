@@ -56,12 +56,10 @@ class _StartScreenState extends State<StartScreen> {
     ));
 
     return Scaffold(
-      body: Scaffold(
-        body: Center(
-            child: LoadingWidget(
-          loadingMessage: geoProviderBuild.loadingMessage,
-        )),
-      ),
+      body: Center(
+          child: LoadingWidget(
+        loadingMessage: geoProviderBuild.loadingMessage,
+      )),
     );
   }
 }

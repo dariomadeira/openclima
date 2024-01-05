@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:openclima/config/routers/app_routers.dart';
 import 'package:openclima/providers/geo_provider.dart';
@@ -9,6 +10,10 @@ import 'package:sizer/sizer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitUp,
+  ]);
   final appPreferences = AppPreferences();
   await appPreferences.initPref();
   return runApp(
@@ -36,10 +41,10 @@ class MyApp extends StatelessWidget {
           title: 'OpenClima',
           theme: ThemeData(
             useMaterial3: true,
-            textTheme: GoogleFonts.josefinSansTextTheme(
+            textTheme: GoogleFonts.aBeeZeeTextTheme(
               Theme.of(context).textTheme,
             ),
-            colorSchemeSeed: Colors.teal,
+            colorSchemeSeed: Colors.yellow,
             appBarTheme: const AppBarTheme(
               centerTitle: true,
             )

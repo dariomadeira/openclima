@@ -5,17 +5,21 @@ class SearchInput extends StatelessWidget {
 
   final TextEditingController searchController;
   final IconData prefixIcon;
-  final IconData suffixIcon;
-  final VoidCallback accion;
+  // final IconData suffixIcon;
+  // final VoidCallback accion;
   final Function? onChanged;
+  // final String buttonText;
+  final Widget? suffixWidget;
 
   const SearchInput({
     super.key,
     required this.searchController,
     this.prefixIcon = Icons.search,
-    this.suffixIcon = Icons.location_searching_outlined,
-    required this.accion,
+    // this.suffixIcon = Icons.location_searching_outlined,
+    // required this.accion,
     this.onChanged,
+    // this.buttonText = "Detectar",
+    this.suffixWidget,
   });
 
   @override
@@ -33,17 +37,18 @@ class SearchInput extends StatelessWidget {
         suffixIconConstraints: const BoxConstraints(
           minWidth: 20,
         ),
-        suffixIcon: Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: FilledButton.icon(
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding * 0.6),
-            ),
-            icon:Icon(suffixIcon),
-            onPressed: accion, 
-            label: const Text("Detectar")
-          ),
-        ),
+        // suffixIcon: Padding(
+        //   padding: const EdgeInsets.only(right: 10),
+        //   child: FilledButton.icon(
+        //     style: ElevatedButton.styleFrom(
+        //       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding * 0.6),
+        //     ),
+        //     icon:Icon(suffixIcon),
+        //     onPressed: accion, 
+        //     label: Text(buttonText)
+        //   ),
+        // ),
+        suffixIcon: suffixWidget,
         hintText: 'Escribe aquí',
         prefixIconConstraints: const BoxConstraints(
           minWidth: 60,
