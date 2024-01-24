@@ -26,11 +26,7 @@ class PreloadWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: backgroundColor,
             ),
-            child: Center(
-              child: FadeIn(
-                child: const LoadingWidget()
-              ),
-            ),
+            child: FadeIn(child: const LoadingWidget()),
           );
         }
         return child!;

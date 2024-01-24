@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:focus_detector/focus_detector.dart';
 import 'package:openclima/config/constants.dart';
 import 'package:openclima/providers/geo_provider.dart';
+import 'package:openclima/providers/theme_provider.dart';
 import 'package:openclima/screens/widgets/states/loading_widget.dart';
 import 'package:openclima/services/shared_preferences_service.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +17,7 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
+  
   @override
   void initState() {
     super.initState();
@@ -28,6 +31,8 @@ class _StartScreenState extends State<StartScreen> {
     final String storageLat = prefs.readPreferenceString(kBaseLat);
     final String storageLong = prefs.readPreferenceString(kBaseLong);
     if (storageLat.isEmpty || storageLong.isEmpty) {
+      await Future.delayed(const Duration(seconds: kSortTime));
+      // ignore: use_build_context_synchronously
       await Navigator.pushReplacementNamed(context, "location");
     } else {
       final geoProvider = Provider.of<GeoProvider>(context, listen: false);
@@ -47,6 +52,7 @@ class _StartScreenState extends State<StartScreen> {
   Widget build(BuildContext context) {
     Color backgroundColor = Theme.of(context).appBarTheme.backgroundColor ?? Colors.transparent;
     final geoProviderBuild = Provider.of<GeoProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarIconBrightness: Brightness.dark,
@@ -55,11 +61,20 @@ class _StartScreenState extends State<StartScreen> {
       systemNavigationBarIconBrightness: Brightness.dark,
     ));
 
-    return Scaffold(
-      body: Center(
-          child: LoadingWidget(
-        loadingMessage: geoProviderBuild.loadingMessage,
-      )),
+    return FocusDetector(
+      onVisibilityGained: () {
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          statusBarIconBrightness: themeProvider.darkTheme ? Brightness.light : Brightness.dark,
+          statusBarColor: Colors.transparent,
+          systemNavigationBarIconBrightness: themeProvider.darkTheme ? Brightness.light : Brightness.dark,
+          systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+        ));
+      },
+      child: Scaffold(
+        body: LoadingWidget(
+          loadingMessage: [geoProviderBuild.loadingMessage],
+        ),
+      ),
     );
   }
 }

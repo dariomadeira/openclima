@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:openclima/config/constants.dart';
 import 'package:openclima/config/helpers/http_responses_helper.dart';
 
 class WheaterApi {
-
   final Dio _dio = Dio();
   final String _authKey = kWeatherKey;
 
@@ -15,24 +15,19 @@ class WheaterApi {
       String weatherUrl = "https://api.weatherapi.com/v1/current.json?key=$_authKey&q=$lat,$long";
       final response = await _dio.get(weatherUrl);
       return HttpResponses.success(response.data);
-    } catch(e) {
+    } catch (e) {
       int statusCode = -1;
-      String message = "Error desconocido";
+      String message = tr("dio_error_unspected");
       dynamic data;
       if (e is DioException) {
-        message = e.message ?? "Error no especificado";
+        message = e.message ?? tr("dio_error_unespecifique");
         if (e.response != null) {
           statusCode = e.response?.statusCode ?? statusCode;
           message = e.response?.statusMessage ?? message;
           data = e.response?.data;
         }
       }
-      return HttpResponses.fail(
-        statusCode: statusCode,
-        message: message,
-        data: data
-      );
+      return HttpResponses.fail(statusCode: statusCode, message: message, data: data);
     }
   }
-
 }

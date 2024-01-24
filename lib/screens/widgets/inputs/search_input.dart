@@ -1,8 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:openclima/config/constants.dart';
 
 class SearchInput extends StatelessWidget {
-
   final TextEditingController searchController;
   final IconData prefixIcon;
   // final IconData suffixIcon;
@@ -44,18 +44,18 @@ class SearchInput extends StatelessWidget {
         //       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding * 0.6),
         //     ),
         //     icon:Icon(suffixIcon),
-        //     onPressed: accion, 
+        //     onPressed: accion,
         //     label: Text(buttonText)
         //   ),
         // ),
         suffixIcon: suffixWidget,
-        hintText: 'Escribe aquí',
+        hintText: tr("input_search_hit"),
         prefixIconConstraints: const BoxConstraints(
           minWidth: 60,
         ),
         fillColor: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.6),
         filled: true,
-        contentPadding: const EdgeInsets.all(kDefaultPadding/1.2),
+        contentPadding: EdgeInsets.all(kDefaultPadding / 1.2),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.transparent),
           borderRadius: BorderRadius.circular(kDefaultPadding * 2), // Bordes redondeados

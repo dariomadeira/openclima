@@ -45,7 +45,7 @@ class _TodayWeatherWidgetState extends State<TodayWeatherWidget> {
           ),
         ),
         Container(
-          padding: const EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
+          padding: EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
           width: 100.w,
           child: Column(
             children: [
@@ -57,7 +57,7 @@ class _TodayWeatherWidgetState extends State<TodayWeatherWidget> {
                 // accion: () {},
               ),
               Padding(
-                padding: const EdgeInsets.only(top: kDefaultPadding),
+                padding: EdgeInsets.only(top: kDefaultPadding),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

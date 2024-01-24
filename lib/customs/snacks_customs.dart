@@ -31,7 +31,7 @@ void showSnackbar({
       ),
     ),
     duration: const Duration(seconds: kDefaultTime),
-    margin: const EdgeInsets.all(kDefaultPadding),
+    margin: EdgeInsets.all(kDefaultPadding),
     borderRadius: BorderRadius.circular(kDefaultPadding / 1.4),
     backgroundColor: snackBarBackgroundColor,
   ).show(context);

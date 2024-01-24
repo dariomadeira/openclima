@@ -5,11 +5,13 @@ import 'package:sizer/sizer.dart';
 class EmptyWidget extends StatelessWidget {
   final List<String> emptyMessage;
   final String svgAsset;
+  final double? finalSpace;
 
   const EmptyWidget({
     super.key,
     required this.emptyMessage,
-    required this.svgAsset
+    required this.svgAsset,
+    this.finalSpace,
   });
 
   @override
@@ -20,8 +22,7 @@ class EmptyWidget extends StatelessWidget {
       children: [
         SvgPicture.asset(
           svgAsset,
-          semanticsLabel: 'Empty location',
-          width: 42.w,
+          width: 56.w,
         ),
         SizedBox(height: 2.h),
         ...emptyMessage.asMap().entries.map((entry) {
@@ -30,12 +31,13 @@ class EmptyWidget extends StatelessWidget {
           return Text(
             message,
             style: TextStyle(
+              color: index > 0 ? Theme.of(context).primaryColor : null,
               fontSize: index == 0 ? 14.sp : 11.sp,
               fontWeight: index == 0 ? FontWeight.w800 : FontWeight.w500,
             ),
           );
         }),
-        SizedBox(height: 6.h),
+        SizedBox(height: finalSpace ?? 0.h),
       ],
     ));
   }

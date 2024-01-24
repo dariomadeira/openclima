@@ -35,10 +35,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  easy_localization: ^3.0.3
   geolocator: ^10.1.0
   geocoding: ^2.1.1
   shared_preferences: ^2.2.2
-  google_fonts: ^4.0.4
   sizer: ^2.0.15
   flutter_svg: ^2.0.7
   lottie: ^2.6.0
@@ -49,6 +49,7 @@ dependencies:
   dio: ^5.3.3
   countup: ^0.1.4
   flutter_keyboard_visibility: ^6.0.0
+  focus_detector: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +88,146 @@ flutter:
     - assets/animations/
     - assets/sounds/
     - assets/translations/
+    - assets/fonts/
+    - assets/icons/
+    - assets/icons/Astronomical/
+    - assets/icons/Astronomical/Day/
+    - assets/icons/Astronomical/Day/Sunrise/
+    - assets/icons/Astronomical/Day/Sunset/
+    - assets/icons/Astronomical/Night/
+    - assets/icons/Astronomical/Night/Moonrise/
+    - assets/icons/Astronomical/Night/Moonset/
+    - assets/icons/Day/
+    - assets/icons/Day/Rain/
+    - assets/icons/Day/Rain/Heavy Freezing Rain/
+    - assets/icons/Day/Rain/Heavy Rain/
+    - assets/icons/Day/Rain/Light Freezing Rain/
+    - assets/icons/Day/Rain/Light Rain/
+    - assets/icons/Day/Rain/Moderate Rain/
+    - assets/icons/Drizzle/
+    - assets/icons/Drizzle/Day/
+    - assets/icons/Drizzle/Day/Dense Drizzle/
+    - assets/icons/Drizzle/Day/Dense Freezing Drizzle/
+    - assets/icons/Drizzle/Day/Light Drizzle/
+    - assets/icons/Drizzle/Day/Light Freezing Drizzle/
+    - assets/icons/Drizzle/Day/Moderate Drizzle/
+    - assets/icons/Drizzle/Night/
+    - assets/icons/Drizzle/Night/Dense Drizzle/
+    - assets/icons/Drizzle/Night/Dense Freezing Drizzle/
+    - assets/icons/Drizzle/Night/Light Drizzle/
+    - assets/icons/Drizzle/Night/Light Freezing Drizzle/
+    - assets/icons/Drizzle/Night/Moderate Drizzle/
+    - assets/icons/Dust/
+    - assets/icons/Dust/Day/
+    - assets/icons/Dust/Day/Dust/
+    - assets/icons/Dust/Night/
+    - assets/icons/Dust/Night/Dust/
+    - assets/icons/Fog/
+    - assets/icons/Fog/Day/
+    - assets/icons/Fog/Day/Fog/
+    - assets/icons/Fog/Day/Rime Fog/
+    - assets/icons/Fog/Night/
+    - assets/icons/Fog/Night/Fog/
+    - assets/icons/Hail/
+    - assets/icons/Hail/Day/
+    - assets/icons/Hail/Day/Hail/
+    - assets/icons/Hail/Night/
+    - assets/icons/Hail/Night/Hail/
+    - assets/icons/Haze/
+    - assets/icons/Haze/Day/
+    - assets/icons/Haze/Day/Haze/
+    - assets/icons/Haze/Night/
+    - assets/icons/Haze/Night/Haze/
+    - assets/icons/Meteorological/
+    - assets/icons/Meteorological/Day/
+    - assets/icons/Meteorological/Day/Rainbow/
+    - assets/icons/Meteorological/Day/Rainbow Alt 1/
+    - assets/icons/Meteorological/Day/Rainbow Alt 2/
+    - assets/icons/Meteorological/Night/
+    - assets/icons/Meteorological/Night/Moonbow/
+    - assets/icons/Meteorological/Night/Moonbow Alt 1/
+    - assets/icons/Meteorological/Night/Moonbow Alt 2/
+    - assets/icons/Miscellaneous/
+    - assets/icons/Miscellaneous/Day/
+    - assets/icons/Miscellaneous/Day/Air Filter/
+    - assets/icons/Miscellaneous/Day/Celsius/
+    - assets/icons/Miscellaneous/Day/Dew Point/
+    - assets/icons/Miscellaneous/Day/Fahrenheit/
+    - assets/icons/Miscellaneous/Day/Humidity/
+    - assets/icons/Miscellaneous/Day/Map Pin/
+    - assets/icons/Miscellaneous/Day/Null/
+    - assets/icons/Miscellaneous/Day/Rainfall Measure/
+    - assets/icons/Miscellaneous/Day/Rainfall Measure Alt/
+    - assets/icons/Miscellaneous/Day/Thermometer/
+    - assets/icons/Miscellaneous/Day/Unknown/
+    - assets/icons/Miscellaneous/Day/Windsock/
+    - assets/icons/Miscellaneous/Day/Windsock Weak/
+    - assets/icons/Miscellaneous/Night/
+    - assets/icons/Miscellaneous/Night/Air Filter/
+    - assets/icons/Miscellaneous/Night/Celsius/
+    - assets/icons/Miscellaneous/Night/Dew Point/
+    - assets/icons/Miscellaneous/Night/Fahrenheit/
+    - assets/icons/Miscellaneous/Night/Humidity/
+    - assets/icons/Miscellaneous/Night/Map Pin/
+    - assets/icons/Miscellaneous/Night/Null/
+    - assets/icons/Miscellaneous/Night/Rainfall Measure/
+    - assets/icons/Miscellaneous/Night/Rainfall Measure Alt/
+    - assets/icons/Miscellaneous/Night/Thermometer/
+    - assets/icons/Miscellaneous/Night/Unknown/
+    - assets/icons/Miscellaneous/Night/Windsock/
+    - assets/icons/Miscellaneous/Night/Windsock Weak/
+    - assets/icons/Natural Disasters/
+    - assets/icons/Natural Disasters/Day/
+    - assets/icons/Natural Disasters/Day/Hurricane/
+    - assets/icons/Natural Disasters/Day/Tornado/
+    - assets/icons/Natural Disasters/Night/
+    - assets/icons/Natural Disasters/Night/Hurricane/
+    - assets/icons/Natural Disasters/Night/Tornado/
+    - assets/icons/Night/
+    - assets/icons/Night/Rain/
+    - assets/icons/Night/Rain/Heavy Freezing Rain/
+    - assets/icons/Night/Rain/Heavy Rain/
+    - assets/icons/Night/Rain/Light Freezing Rain/
+    - assets/icons/Night/Rain/Light Rain/
+    - assets/icons/Night/Rain/Moderate Rain/
+    - assets/icons/Night/Snow/
+    - assets/icons/Night/Snow/Snowfall/
+    - assets/icons/Night/Snow/Snowfall/Heavy Snowfall/
+    - assets/icons/Normal Conditions/
+    - assets/icons/Normal Conditions/Day/
+    - assets/icons/Normal Conditions/Day/Clear/
+    - assets/icons/Normal Conditions/Day/Cloudy/
+    - assets/icons/Normal Conditions/Day/Mostly Clear/
+    - assets/icons/Normal Conditions/Day/Overcast/
+    - assets/icons/Normal Conditions/Day/Partly Cloudy/
+    - assets/icons/Normal Conditions/Night/
+    - assets/icons/Normal Conditions/Night/Clear/
+    - assets/icons/Normal Conditions/Night/Cloudy/
+    - assets/icons/Normal Conditions/Night/Mostly Clear/
+    - assets/icons/Normal Conditions/Night/Overcast/
+    - assets/icons/Normal Conditions/Night/Partly Cloudy/
+    - assets/icons/Snow/
+    - assets/icons/Snow/Day/
+    - assets/icons/Snow/Day/Sleet/
+    - assets/icons/Snow/Day/Snowfall/
+    - assets/icons/Snow/Day/Snowfall/Heavy Snowfall/
+    - assets/icons/Snow/Day/Snowfall/Moderate Snowfall/
+    - assets/icons/Snow/Day/Snowfall/Slight Snowfall/
+    - assets/icons/Snow/Day/Snowflake/
+    - assets/icons/Snow/Night/
+    - assets/icons/Snow/Night/Sleet/
+    - assets/icons/Snow/Night/Snowfall/
+    - assets/icons/Snow/Night/Snowfall/Moderate Snowfall/
+    - assets/icons/Snow/Night/Snowfall/Slight Snowfall/
+    - assets/icons/Snow/Night/Snowflake/
+    - assets/icons/Thunderstorm/
+    - assets/icons/Thunderstorm/Day/
+    - assets/icons/Thunderstorm/Day/Thunderstorm/
+    - assets/icons/Thunderstorm/Day/Thunderstorm with Hail/
+    - assets/icons/Thunderstorm/Night/
+    - assets/icons/Thunderstorm/Night/Thunderstorm/
+    - assets/icons/Thunderstorm/Night/Thunderstorm with Hail/
+    - assets/icons/Miscellaneous/Both/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -100,6 +241,23 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: ProductSans
+      fonts:
+        - asset: assets/fonts/ProductSans-Regular.ttf
+          style: normal
+        - asset: assets/fonts/ProductSans-Italic.ttf
+          style: italic
+        - asset: assets/fonts/ProductSans-Thin.ttf
+          weight: 300
+        - asset: assets/fonts/ProductSans-Light.ttf
+          weight: 400
+        - asset: assets/fonts/ProductSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/ProductSans-Black.ttf
+          weight: 700
+        - asset: assets/fonts/ProductSans-Bold.ttf
+          weight: 800
   # fonts:
   #   - family: Schyler
   #     fonts:

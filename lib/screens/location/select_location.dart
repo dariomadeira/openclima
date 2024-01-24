@@ -1,5 +1,7 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_place/google_place.dart';
 import 'package:openclima/config/constants.dart';
 import 'package:openclima/config/helpers/colors_helper.dart';
@@ -47,6 +49,7 @@ class _SelectLocationState extends State<SelectLocation> {
 
   @override
   Widget build(BuildContext context) {
+
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final geoProvider = Provider.of<GeoProvider>(context);
 
@@ -83,7 +86,7 @@ class _SelectLocationState extends State<SelectLocation> {
           long: result.result!.geometry!.location!.lng.toString(),
         );
         // ignore: use_build_context_synchronously
-        showSnackbar(type: "success", message: 'Hemos obtenido tu ubicación', context: context);
+        showSnackbar(type: "success", message: tr("location_snack_success"), context: context);
         if (dataBoolean) {
           await Future.delayed(const Duration(seconds: kSortTime));
           getWeather();
@@ -91,32 +94,43 @@ class _SelectLocationState extends State<SelectLocation> {
       }
     }
 
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ));
+
     return Scaffold(
       appBar: !geoProvider.isLoading
           ? AppBar(
-              title: const Text("Mi ubicación"),
+              title: Text(
+                tr("location_title"),
+                style: TextStyle(
+                  fontSize: 14.sp,
+                ),
+              ),
             )
           : null,
       floatingActionButton: !geoProvider.isLoading
           ? FloatingActionButton.extended(
               elevation: 0.0,
               onPressed: getGeoLocation,
-              label: const Text("Detectar"),
-              icon: const Icon(Icons.my_location_outlined),
+              label: Text(
+                tr("location_button_detect"), 
+                style: TextStyle(color: Theme.of(context).primaryColor)
+              ),
+              icon: Icon(Icons.my_location_outlined, color: Theme.of(context).primaryColor),
             )
           : null,
       body: geoProvider.isLoading
-          ? Center(
-              child: FadeIn(
-                child: LoadingWidget(
-                  loadingMessage: geoProvider.loadingMessage,
-                ),
+          ? FadeIn(
+              child: LoadingWidget(
+                loadingMessage: [geoProvider.loadingMessage],
               ),
             )
           : Column(
               children: [
                 Container(
-                    padding: const EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
+                    padding: EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
                     width: 100.w,
                     color: scaffoldBackgroundColor,
                     child: SearchInput(
@@ -138,13 +152,18 @@ class _SelectLocationState extends State<SelectLocation> {
                       width: 100.w,
                       child: predictions.isEmpty && !isKeyboardVisible
                           ? FadeIn(
-                            child: const EmptyWidget(
-                                emptyMessage: ["Sin ubicación", "Busque una ubicación", "o presione detectar"],
+                              child: EmptyWidget(
+                                emptyMessage: [
+                                  tr("location_empty_location_1"), 
+                                  tr("location_empty_location_2"), 
+                                  tr("location_empty_location_3")
+                                ],
                                 svgAsset: 'assets/svgs/emptyLocation.svg',
+                                finalSpace: 6.h,
                               ),
-                          )
+                            )
                           : ListView.builder(
-                              padding: const EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
+                              padding: EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
                               itemCount: predictions.length,
                               itemBuilder: (context, index) {
                                 return Column(
@@ -161,7 +180,7 @@ class _SelectLocationState extends State<SelectLocation> {
                                         selectGeoLocation(placeId: predictions[index].placeId!);
                                       },
                                     ),
-                                    const SizedBox(height: kDefaultPadding),
+                                    SizedBox(height: kDefaultPadding / 2),
                                   ],
                                 );
                               },

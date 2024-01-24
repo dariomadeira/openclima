@@ -2,12 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class ColorsHelper {
-
-  Color calculateBGColor({
-    required Color color,
-    required BuildContext context,
-    double opacity = 0.16
-  }) {
+  Color calculateBGColor({required Color color, required BuildContext context, double opacity = 0.16}) {
     final ThemeData theme = Theme.of(context);
     final bool isDark = theme.brightness == Brightness.dark;
     if (isDark) {
@@ -30,11 +25,7 @@ class ColorsHelper {
     }
   }
 
-  Color calculateRippleColor({
-    required Color color,
-    required BuildContext context,
-    double opacity = 0.16
-  }) {
+  Color calculateRippleColor({required Color color, required BuildContext context, double opacity = 0.16}) {
     final ThemeData theme = Theme.of(context);
     final bool isDark = theme.brightness == Brightness.dark;
     if (isDark) {
@@ -58,11 +49,7 @@ class ColorsHelper {
     }
   }
 
-  Color calculateColorInicials({
-    required Color color,
-    required BuildContext context,
-    double opacity = 0.8
-  }) {
+  Color calculateColorInicials({required Color color, required BuildContext context, double opacity = 0.8}) {
     final ThemeData theme = Theme.of(context);
     final bool isDark = theme.brightness == Brightness.dark;
     if (isDark) {
@@ -95,5 +82,4 @@ class ColorsHelper {
   Color randomColor() {
     return Colors.primaries[Random().nextInt(Colors.primaries.length)];
   }
-
 }

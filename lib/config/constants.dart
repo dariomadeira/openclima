@@ -1,74 +1,136 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
-const double kDefaultPadding = 20;
+double kDefaultPadding = 4.w;
 const int kDefaultTime = 4;
 const int kSortTime = 2;
 const Color kSnackSuccess = Color(0xFF53BD8C);
 const String kGooglePlacesApiKey = "AIzaSyA_0BULRV-1AYr4BLTFbhGpC-fI1uSqw-4";
 const String kWeatherKey = "ec23b57a160c4d07a70125728212705";
+const String kDarkModePref = "darkMode";
 
 const String kBaseLat = 'lat';
 const String kBaseLong = 'long';
 
-const List<Map<String, dynamic>> weatherTypes = [
-  {
-    "name": "Caluroso",
-    "asset": ["assets/svgs/calido.svg", "assets/svgs/calido1.svg", "assets/svgs/calido2.svg"],
-    "color": Color(0xFF53BD8C),
-    "min": 25,
-    "max": 30,
-  },
-  {
-    "name": "Caliente",
-    "asset": ["assets/svgs/caliente.svg", "assets/svgs/caliente1.svg", "assets/svgs/calient2.svg"],
-    "color": Color(0xFF53BD8C),
-    "min": 31,
-    "max": 100,
-  },
-  {
-    "name": "Fresco",
-    "asset": ["assets/svgs/fresco.svg", "assets/svgs/fresco1.svg", "assets/svgs/fresco2.svg"],
-    "color": Color(0xFF53BD8C),
-    "min": 18,
-    "max": 24,
-  },
-  {
-    "name": "Frio",
-    "asset": ["assets/svgs/frio1.svg", "assets/svgs/frio2.svg", "assets/svgs/frio3.svg"],
-    "color": Color(0xFF53BD8C),
-    "min": -100,
-    "max": 17,
-  },
-];
-
-
 const List<Map<String, dynamic>> weatherHeaderSettings = [
   {
-    "name": "Caluroso",
-    "asset": ["assets/images/hot.png"],
-    "appColor": Color(0xFF53BD8C),
-    "min": 25,
-    "max": 30,
-  },
-  {
     "name": "Caliente",
-    "asset": ["assets/svgs/caliente.svg", "assets/svgs/caliente1.svg", "assets/svgs/calient2.svg"],
-    "color": Color(0xFF53BD8C),
-    "min": 31,
-    "max": 100,
+    "options": [
+      // {
+      //   "header": "assets/images/hot1.png",
+      //   "bodyColor": Color(0xFF72C6F4),
+      //   "headerColor": Color(0xFFFCDD51),
+      //   "appBarIconsColorsDark": true,
+      //   "navBarIconsColorsDark": true,
+      // },
+      // {
+      //   "header": "assets/images/hot2.png",
+      //   "bodyColor": Color(0xFF72C6F4),
+      //   "headerColor": Color(0xFFFCDD51),
+      //   "appBarIconsColorsDark": true,
+      //   "navBarIconsColorsDark": true,
+      // },
+      {
+        "header": "assets/images/hot3.png",
+        "bodyColor": Color(0xFFFEE38A),
+        "headerColor": Color(0xFFABEDF8),
+        "appBarIconsColorsDark": true,
+        "navBarIconsColorsDark": true,
+      },
+    ],
+    "weatherAssets": ["assets/svgs/hotAsset1.svg", "assets/svgs/hotAsset2.svg"],
+    "appColor": Colors.yellow,
+    "min": 31.0,
+    "max": 100.0,
   },
   {
-    "name": "Fresco",
-    "asset": ["assets/svgs/fresco.svg", "assets/svgs/fresco1.svg", "assets/svgs/fresco2.svg"],
-    "color": Color(0xFF53BD8C),
-    "min": 18,
-    "max": 24,
+    "name": "Caluroso",
+    "options": [
+      // {
+      //   "header": "assets/images/hot1.png",
+      //   "bodyColor": Color(0xFF72C6F4),
+      //   "headerColor": Color(0xFFFCDD51),
+      //   "appBarIconsColorsDark": true,
+      //   "navBarIconsColorsDark": true,
+      // },
+      // {
+      //   "header": "assets/images/hot2.png",
+      //   "bodyColor": Color(0xFF72C6F4),
+      //   "headerColor": Color(0xFFFCDD51),
+      //   "appBarIconsColorsDark": true,
+      //   "navBarIconsColorsDark": true,
+      // },
+      {
+        "header": "assets/images/hot3.png",
+        "bodyColor": Color(0xFFFEE38A),
+        "headerColor": Color(0xFFABEDF8),
+        "appBarIconsColorsDark": true,
+        "navBarIconsColorsDark": true,
+      },
+    ],
+    "weatherAssets": ["assets/svgs/hotAsset1.svg", "assets/svgs/hotAsset2.svg"],
+    "appColor": Colors.yellow,
+    "min": 25.0,
+    "max": 30.9,
+  },
+  {
+    "name": "Hermoso",
+    "options": [
+      // {
+      //   "header": "assets/images/hot1.png",
+      //   "bodyColor": Color(0xFF72C6F4),
+      //   "headerColor": Color(0xFFFCDD51),
+      //   "appBarIconsColorsDark": true,
+      //   "navBarIconsColorsDark": true,
+      // },
+      // {
+      //   "header": "assets/images/hot2.png",
+      //   "bodyColor": Color(0xFF72C6F4),
+      //   "headerColor": Color(0xFFFCDD51),
+      //   "appBarIconsColorsDark": true,
+      //   "navBarIconsColorsDark": true,
+      // },
+      {
+        "header": "assets/images/hot3.png",
+        "bodyColor": Color(0xFFFEE38A),
+        "headerColor": Color(0xFFABEDF8),
+        "appBarIconsColorsDark": true,
+        "navBarIconsColorsDark": true,
+      },
+    ],
+    "weatherAssets": ["assets/svgs/hotAsset1.svg", "assets/svgs/hotAsset2.svg"],
+    "appColor": Colors.yellow,
+    "min": 18.0,
+    "max": 24.9,
   },
   {
     "name": "Frio",
-    "asset": ["assets/svgs/frio1.svg", "assets/svgs/frio2.svg", "assets/svgs/frio3.svg"],
-    "color": Color(0xFF53BD8C),
-    "min": -100,
-    "max": 17,
+    "options": [
+      // {
+      //   "header": "assets/images/hot1.png",
+      //   "bodyColor": Color(0xFF72C6F4),
+      //   "headerColor": Color(0xFFFCDD51),
+      //   "appBarIconsColorsDark": true,
+      //   "navBarIconsColorsDark": true,
+      // },
+      // {
+      //   "header": "assets/images/hot2.png",
+      //   "bodyColor": Color(0xFF72C6F4),
+      //   "headerColor": Color(0xFFFCDD51),
+      //   "appBarIconsColorsDark": true,
+      //   "navBarIconsColorsDark": true,
+      // },
+      {
+        "header": "assets/images/hot3.png",
+        "bodyColor": Color(0xFFFEE38A),
+        "headerColor": Color(0xFFABEDF8),
+        "appBarIconsColorsDark": true,
+        "navBarIconsColorsDark": true,
+      },
+    ],
+    "weatherAssets": ["assets/svgs/hotAsset1.svg", "assets/svgs/hotAsset2.svg"],
+    "appColor": Colors.yellow,
+    "min": -100.0,
+    "max": 17.9,
   },
 ];
